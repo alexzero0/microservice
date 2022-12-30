@@ -30,7 +30,7 @@ async def send_rabbitmq(msg = {}):
 
     await channel.default_exchange.publish(
         Message(json.dumps(msg.dict()).encode("utf-8")),
-        routing_key = "fastapi_task"
+        routing_key = "rabbitmq_task"
     )
 
     await connection.close()

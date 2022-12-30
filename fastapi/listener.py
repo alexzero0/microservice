@@ -8,11 +8,11 @@ async def on_message(message: IncomingMessage):
 
 
 async def main(loop):
-    connection = await connect("amqp://guest:guest@localhost//", loop = loop)
+    connection = await connect("amqp://guest:guest@localhost/", loop = loop)
 
     channel = await connection.channel()
 
-    queue = await channel.declare_queue("fastapi_task")
+    queue = await channel.declare_queue("rabbitmq_task", durable=True)
 
     await queue.consume(on_message, no_ack = True)
 
