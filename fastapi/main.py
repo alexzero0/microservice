@@ -23,8 +23,8 @@ async def hello():
     return "Hello Word"
 
 async def send_rabbitmq(msg = {}):
-    print('send msg', msg)
-    connection = await connect("amqp://guest:guest@localhost/")
+    print('send msg - python', msg)
+    connection = await connect("amqp://guest:guest@rabbitmq:5672/")
 
     channel = await connection.channel()
 
@@ -35,5 +35,5 @@ async def send_rabbitmq(msg = {}):
 
     await connection.close()
 
-if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+# if __name__ == "__main__":
+#     uvicorn.run(app, host="0.0.0.0", port=8000)

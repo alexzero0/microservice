@@ -1,0 +1,66 @@
+version: '3'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    restart: always
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    ports:
+      - 15672:15672
+      - 5672:5672
+  frontend:
+    build: ./next
+    restart: always
+    ports:
+      - '3000:3000'
+    volumes:
+      - /app/node_modules
+      - ./next:/app
+  fastapi:
+    build: ./fastapi
+    restart: always
+    ports:
+      - '8000:8000'
+    volumes:
+      - ./fastapi:/app
+      # - /app/node_modules
+    depends_on:
+      - rabbitmq
+    # environment:
+    #   MYSQL_HOST: mysql
+    #   MYSQL_USER: root
+    #   MYSQL_PORT: '3306'
+    #   MYSQL_PASSWORD: password
+    #   MYSQL_DB: time_db
+  express:
+    build: ./express
+    restart: always
+    ports:
+      - '4000:4000'
+    volumes:
+      - /app/node_modules
+      - ./express:/app
+    depends_on:
+      - rabbitmq
+      - postgressql
+  postgressql:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: ms-password
+      POSTGRES_DB: ms-db
+      POSTGRES_USER: ms-user
+    volumes:
+      - postgressql_data:/var/lib/postgressql
+    ports:
+      - '5432:5432'
+  # adminer:
+  #   image: adminer
+  #   restart: always
+  #   ports:
+  #     - '8888:8080'
+
+volumes:
+  postgressql_data:

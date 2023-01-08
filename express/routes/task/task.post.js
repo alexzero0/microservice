@@ -4,9 +4,9 @@ const { validate, body } = require('../../helpers/validator');
 const amqp = require("amqplib");
 
 const send_rabbitmq = async (task) => {
-    console.log('send msg', task);
+    console.log('send msg - node', task);
 
-    const connection = await amqp.connect('amqp://guest:guest@localhost/');
+    const connection = await amqp.connect('amqp://guest:guest@rabbitmq:5672/');
     const channel = await connection.createChannel();
     await channel.assertQueue("rabbitmq_task", durable = false);
 
