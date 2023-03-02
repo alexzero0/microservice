@@ -1,20 +1,22 @@
 import asyncio
-from aio_pika import connect, IncomingMessage
 import json
 
-async def on_message(message: IncomingMessage):
-    txt = message.body.decode("utf-8")
-    print(json.loads(txt))
+from pkg.rabbitmq.broker import rpc, connect_to_broker, MessagePattern
 
+@MessagePattern(cmd="rpc_test_queue")
+async def rpc_accept_message(**message):
+    print('rpc_accept_message')
+    print(message['test'])
+    return { "result": 15 * message['test'] }
 
 async def main(loop):
-    connection = await connect("amqp://guest:guest@localhost/", loop = loop)
+    print('main')
+    channel = await connect_to_broker()
+    rpc.channel = channel
+    print(rpc.queue_names)
+    await rpc.start_listing()
+    print('----->  alelllua  <-----')
 
-    channel = await connection.channel()
-
-    queue = await channel.declare_queue("rabbitmq_task", durable=True)
-
-    await queue.consume(on_message, no_ack = True)
 
 # it is file for test rabbitmq
 if __name__ == "__main__":

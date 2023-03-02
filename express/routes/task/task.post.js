@@ -1,19 +1,12 @@
 const router = require('express').Router();
 const errors = require('../../helpers/errors');
 const { validate, body } = require('../../helpers/validator');
-const amqp = require("amqplib");
+const { rpc } = require('../../helpers/broker');
 
-const send_rabbitmq = async (task) => {
-    console.log('send msg - node', task);
-
-    const connection = await amqp.connect('amqp://guest:guest@rabbitmq:5672/');
-    const channel = await connection.createChannel();
-    await channel.assertQueue("rabbitmq_task", durable = false);
-
-    await channel.sendToQueue("rabbitmq_task", Buffer.from(JSON.stringify(task)));
-    await channel.close();
-    await connection.close();
-};
+const test = async (...args) => {
+    console.log('js test', args)
+    return JSON.parse(args[0])
+}
 
 router.post(
     '/task',
@@ -24,9 +17,12 @@ router.post(
     ]),
     errors.wrap(async (req, res) => {
         const msg = req.body;
-        await send_rabbitmq(msg);
 
-        res.send(msg);
+        await rpc.init();
+        // send to listener.py
+        const t = await rpc.call('rpc_test_queue', { test: 5 });
+
+        res.send({msg, t});
     })
 );
 
