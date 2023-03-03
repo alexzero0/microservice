@@ -1,34 +1,36 @@
 {
-  "name": "express",
-  "version": "1.0.0",
-  "description": "microservice for scientific work",
-  "main": "server.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "db:local:docker:run": "docker run --name ms-postgres -e POSTGRES_USER=ms-user -e POSTGRES_DB=ms-db -e POSTGRES_PASSWORD=ms-password -p 5432:5432 -d postgres",
-    "dev": "nodemon ./server",
-    "migrate": "npx sequelize-cli db:migrate"
-  },
-  "author": "Alex zero",
-  "license": "ISC",
-  "dependencies": {
-    "amqplib": "^0.10.3",
-    "config": "^3.3.8",
-    "cors": "^2.8.5",
-    "crypto": "^1.0.1",
-    "dotenv": "^16.0.3",
-    "express": "^4.18.2",
-    "express-validator": "^6.14.2",
-    "jsonwebtoken": "^9.0.0",
-    "pg": "^8.8.0",
-    "recursive-readdir-sync": "^1.0.6",
-    "sequelize": "^6.28.0",
-    "sequelize-cli": "^6.5.2",
-    "swagger-jsdoc": "^6.2.7",
-    "swagger-ui-express": "^4.6.0",
-    "uuid": "^9.0.0"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.20"
-  }
+    "name": "express",
+    "version": "1.0.0",
+    "description": "microservice for scientific work",
+    "main": "server.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "db:local:docker:run": "docker run --name ms-postgres -e POSTGRES_USER=ms-user -e POSTGRES_DB=ms-db -e POSTGRES_PASSWORD=ms-password -p 5432:5432 -d postgres",
+        "dev": "nodemon ./server",
+        "migrate": "npx sequelize-cli db:migrate",
+        "format": "prettier --write . "
+    },
+    "author": "Alex zero",
+    "license": "ISC",
+    "dependencies": {
+        "amqplib": "^0.10.3",
+        "config": "^3.3.8",
+        "cors": "^2.8.5",
+        "crypto": "^1.0.1",
+        "dotenv": "^16.0.3",
+        "express": "^4.18.2",
+        "express-validator": "^6.14.2",
+        "jsonwebtoken": "^9.0.0",
+        "pg": "^8.8.0",
+        "prettier": "^2.8.4",
+        "recursive-readdir-sync": "^1.0.6",
+        "sequelize": "^6.28.0",
+        "sequelize-cli": "^6.5.2",
+        "swagger-jsdoc": "^6.2.7",
+        "swagger-ui-express": "^4.6.0",
+        "uuid": "^9.0.0"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.20"
+    }
 }

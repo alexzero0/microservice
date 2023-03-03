@@ -4,7 +4,6 @@ const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const errors = require('../helpers/errors');
 
-
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {

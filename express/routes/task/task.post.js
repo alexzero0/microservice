@@ -4,9 +4,9 @@ const { validate, body } = require('../../helpers/validator');
 const { rpc } = require('../../helpers/broker');
 
 const test = async (...args) => {
-    console.log('js test', args)
-    return JSON.parse(args[0])
-}
+    console.log('js test', args);
+    return JSON.parse(args[0]);
+};
 
 router.post(
     '/task',
@@ -22,7 +22,7 @@ router.post(
         // send to listener.py
         const t = await rpc.call('rpc_test_queue', { test: 5 });
 
-        res.send({msg, t});
+        res.send({ msg, t });
     })
 );
 

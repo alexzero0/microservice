@@ -1,7 +1,7 @@
 const config = require('config').database;
 module.exports = {
     url: config.databaseURI,
-    dialect: "postgres",
+    dialect: 'postgres',
     ssl: true,
     dialectOptions: {
         // ssl: {
@@ -9,4 +9,4 @@ module.exports = {
         //     rejectUnauthorized: false,
         // },
     },
-}
+};

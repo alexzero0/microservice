@@ -4,9 +4,9 @@ const errors = require('../../helpers/errors');
 router.get(
     '/hello',
     errors.wrap(async (req, res) => {
-       const response = 'hello world!';
+        const response = 'hello world!';
 
-        res.send({response});
+        res.send({ response });
     })
 );
 
