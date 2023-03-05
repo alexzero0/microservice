@@ -2,11 +2,14 @@ const router = require('express').Router();
 const errors = require('../../helpers/errors');
 
 router.get(
-    '/hello',
+    '/healcheck',
     errors.wrap(async (req, res) => {
-        const response = 'hello world!';
 
-        res.send({ response });
+        res.send({
+            status: 200,
+            message: 'server working',
+            server: 'express'
+        });
     })
 );
 

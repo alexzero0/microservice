@@ -14,7 +14,7 @@ async def main(loop):
     channel = await connect_to_broker()
     rpc.channel = channel
     print(rpc.queue_names)
-    await rpc.start_listing()
+    await rpc.start_listener()
     print('----->  alelllua  <-----')
 
 

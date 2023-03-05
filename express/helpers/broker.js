@@ -2,15 +2,38 @@ const { v4: uuidv4 } = require('uuid');
 
 const amqp = require('amqplib');
 
-const RMQ_LOGIN = process.env.RMQ_LOGIN;
-const RMQ_PASSWORD = process.env.RMQ_PASSWORD;
-const RMQ_HOST = process.env.RMQ_HOST;
-const RMQ_PORT = process.env.RMQ_PORT;
+const RMQ_LOGIN = process.env.EXPRESS_RMQ_LOGIN;
+const RMQ_PASSWORD = process.env.EXPRESS_RMQ_PASSWORD;
+const RMQ_HOST = process.env.EXPRESS_RMQ_HOST;
+const RMQ_PORT = process.env.EXPRESS_RMQ_PORT;
 
 class BaseRMQ {
     // constructor(channel) {
     //   this.channel = channel;
     // }
+    connection = null;
+    channel = null;
+
+    async init() {
+        // move to BaseRMQ
+        console.log('--- start init ---');
+        let retries = 0
+        while (!this.connection) {
+            try {
+                const conn_str = `amqp://${RMQ_LOGIN}:${RMQ_PASSWORD}@${RMQ_HOST}:${RMQ_PORT}/`;
+                console.log('conn_str', conn_str);
+                this.connection = await amqp.connect(conn_str);
+            } catch {
+                retries += 1;
+                console.log(`Can't connect to broker ${retries}. Will retry in 5 seconds...`);
+                await this.sleep(5000)
+            }
+        }
+        // this.connection = await amqp.connect(conn_str);
+        if (!this.channel) this.channel = await this.connection.createChannel();
+        // this.channel = await this.connection.createChannel();
+        return this.channel;
+    }
 
     static serialize(data) {
         const result = Buffer.from(JSON.stringify(data));
@@ -33,18 +56,13 @@ class BaseRMQ {
         }
         return true;
     }
+
+    sleep = ms => new Promise(r => setTimeout(r, ms));
 }
 
 class RPC extends BaseRMQ {
     futures = new Map();
     queueNames = {};
-
-    async init() {
-        // move to BaseRMQ
-        const conn_str = `amqp://${RMQ_LOGIN}:${RMQ_PASSWORD}@${RMQ_HOST}:${RMQ_PORT}/`;
-        this.connection = await amqp.connect(conn_str);
-        this.channel = await this.connection.createChannel();
-    }
 
     async cancelConsumer(queue, consumerTag) {
         await this.channel.cancel(consumerTag);
@@ -119,4 +137,5 @@ class RPC extends BaseRMQ {
 }
 
 const rpc = new RPC();
+// rpc.init().then(console.log).catch(console.log)
 module.exports = { rpc };

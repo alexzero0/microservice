@@ -18,10 +18,10 @@ from aio_pika.message import IncomingMessage, Message
 
 # from utils import Aobject
 # Параметры RMQ иначе используются дефолтные значения от контейнера.
-RMQ_LOGIN = os.environ.get("RMQ_LOGIN", "guest")
-RMQ_PASSWORD = os.environ.get("RMQ_PASSWORD", "guest")
-RMQ_HOST = os.environ.get("RMQ_HOST", "localhost")
-RMQ_PORT = os.environ.get("RMQ_PORT", "5672")
+RMQ_LOGIN = os.environ.get("FASTAPI_RMQ_LOGIN", "guest")
+RMQ_PASSWORD = os.environ.get("FASTAPI_RMQ_PASSWORD", "guest")
+RMQ_HOST = os.environ.get("FASTAPI_RMQ_HOST", "localhost")
+RMQ_PORT = os.environ.get("FASTAPI_RMQ_PORT", "5672")
 
 # Эти глобальные переменные хранят объекты соединения и канала к брокеру.
 # Функция connect_to_broker пытается в первую очередь использовать их, но если их нет, то она создаст их.

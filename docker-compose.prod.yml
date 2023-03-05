@@ -1,0 +1,73 @@
+version: '3'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    restart: always
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    ports:
+      - 15672:15672
+      - 5672:5672
+  frontend:
+    build: ./next
+    restart: always
+    ports:
+      - '3000:3000'
+    volumes:
+      - /app/node_modules
+      - ./next:/app
+  fastapi:
+    build: ./fastapi
+    restart: always
+    ports:
+      - '8000:8000'
+    environment:
+        FASTAPI_RMQ_HOST: rabbitmq
+        FASTAPI_RMQ_LOGIN: guest
+        FASTAPI_RMQ_PASSWORD: guest
+        FASTAPI_RMQ_PORT: 5672
+    command: [
+      "uvicorn", "app:create_app",
+      "--host", "0.0.0.0",
+      "--port", "8000"
+    ]
+    volumes:
+      - ./fastapi:/app
+    depends_on:
+      - rabbitmq
+  express:
+    build: ./express
+    restart: always
+    ports:
+      - '4000:4000'
+    command: [ "npm", "run", "prod" ]
+    environment:
+      EXPRESS_PORT: 4000
+      EXPRESS_DATABASE_URL: postgres://ms-user:ms-password@postgressql:5432/ms-db
+      EXPRESS_SALT: supersecretsalt
+      EXPRESS_RMQ_LOGIN: guest
+      EXPRESS_RMQ_PASSWORD: guest
+      EXPRESS_RMQ_HOST: rabbitmq
+      EXPRESS_RMQ_PORT: 5672
+    volumes:
+      - /app/node_modules
+      - ./express:/app
+    depends_on:
+      - rabbitmq
+      - postgressql
+  postgressql:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: ms-password
+      POSTGRES_DB: ms-db
+      POSTGRES_USER: ms-user
+    volumes:
+      - postgressql_prod_data:/var/lib/postgressql
+    ports:
+      - '5432:5432'
+
+volumes:
+  postgressql_prod_data:

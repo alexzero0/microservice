@@ -17,7 +17,8 @@ async def healcheck():
 
     return JSONResponse({
         'status': 200,
-        'message': 'server working'
+        'message': 'server working',
+        'server': 'fastapi'
     })
 
 @router.get('/send-rpc')
@@ -26,7 +27,7 @@ async def send_request():
 
     routing_key = "rpc_test_queue"  # Название очереди которую слушает сервис B
     # Публикация сообщения.
-    response = await rpc.call(routing_key, data=10)
+    response = await rpc.call(routing_key, test=10)
     return JSONResponse({
         'status': 200,
         'message': 'server working',

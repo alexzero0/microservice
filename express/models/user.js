@@ -71,7 +71,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     User.hashPassword = (password) => {
         return crypto
-            .createHmac('sha512', process.env.SALT || 'salt')
+            .createHmac('sha512', process.env.EXPRESS_SALT || 'salt')
             .update(password)
             .digest('hex');
     };
@@ -81,13 +81,13 @@ module.exports = (sequelize, DataTypes) => {
      * @return {{type: string, expiresIn: *, accessToken: *}}
      */
     User.prototype.generateToken = async function () {
-        const salt = process.env.SALT || 'salt';
+        const salt = process.env.EXPRESS_SALT || 'salt';
         const data = {
             userId: this.uuid,
             userRole: this.role,
         };
 
-        const tokenLifeTime = process.env.TOKEN_LIFE_TIME || 600000;
+        const tokenLifeTime = process.env.EXPRESS_TOKEN_LIFE_TIME || 600000;
         return {
             type: 'Bearer',
             expiresIn: tokenLifeTime,

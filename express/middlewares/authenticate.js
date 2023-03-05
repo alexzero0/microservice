@@ -11,7 +11,7 @@ module.exports = function authenticate(roles) {
             let payload;
 
             try {
-                payload = jwt.verify(token, process.env.SALT || 'salt');
+                payload = jwt.verify(token, process.env.EXPRESS_SALT || 'salt');
             } catch (err) {
                 throw errors.UnauthorizedError(err.name);
             }

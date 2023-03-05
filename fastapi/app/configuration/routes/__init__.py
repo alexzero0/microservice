@@ -1,4 +1,4 @@
 from app.configuration.routes.routes import *
-from app.internal.routes import user
+from app.internal.routes import healcheck
 
-__routes__ = Routes(routers=(user.router, ))
+__routes__ = Routes(routers=(healcheck.router, ))
