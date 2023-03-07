@@ -75,3 +75,6 @@ docker-compose -f docker-compose.prod.yml up --build
 
 * **Alex zero** - *web developer* - [web page](https://alexzero0.github.io/web-card/) 
 
+#### Warning
+* Beta test project (not all functionality has been tested) 
+* there are no tests
